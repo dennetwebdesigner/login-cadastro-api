@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://joatan:123@localhost:3306/redesocial"
+}
+
+model User {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  username  String    @unique
+  password  String
+  Profie    Profie[]
+  Address   Address[]
+  Contact   Contact[]
+}
+
+model Profie {
+  id        String   @id @default(uuid())
+  name      String
+  lastName  String
+  birthday  String
+  createdAt DateTime @default(now())
+  user_id   String
+  user      User     @relation(fields: [user_id], references: [id])
+
+  @@map("profile")
+}
+
+model Address {
+  id        String   @id @default(uuid())
+  city      String
+  state     String
+  country   String
+  createdAt DateTime @default(now())
+  user_id   String
+  user      User     @relation(fields: [user_id], references: [id])
+
+  @@map("addresses")
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  type      String
+  data      String
+  createdAt DateTime @default(now())
+  user_id   String
+  user      User     @relation(fields: [user_id], references: [id])
+
+  @@map("contact")
+}
